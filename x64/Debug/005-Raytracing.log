@@ -1,0 +1,11 @@
+﻿  main.cpp
+c:\users\luigi\desktop\cs 4600\hw5\main.cpp(61): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+c:\users\luigi\desktop\cs 4600\hw5\main.cpp(79): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\desktop\cs 4600\hw5\main.cpp(79): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+c:\users\luigi\desktop\cs 4600\hw5\main.cpp(96): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\luigi\desktop\cs 4600\hw5\main.cpp(159): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\luigi\desktop\cs 4600\hw5\main.cpp(198): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\desktop\cs 4600\hw5\main.cpp(199): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\desktop\cs 4600\hw5\main.cpp(200): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\desktop\cs 4600\hw5\main.cpp(201): warning C4305: 'argument': truncation from 'double' to 'const float'
+  005-Raytracing.vcxproj -> C:\Users\luigi\Desktop\cs 4600\HW5\x64\Debug\005-Raytracing.exe
