@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <Eigen>
 
+#define MAX_RAY_DEPTH 5 
 using namespace Eigen;
 
 // image background color
@@ -25,13 +26,14 @@ public:
 	Vector3f center;  // position of the sphere
 	float radius;  // sphere radius
 	Vector3f surfaceColor; // surface color
-	bool isGlass;
+	float reflect;
+	float refract;
 	
-	Sphere(bool g,
+	Sphere(
 		const Vector3f &c,
 		const float &r,
-		const Vector3f &sc) :
-		center(c), radius(r), surfaceColor(sc)
+		const Vector3f &sc,float reflec, float refrac) :
+		center(c), radius(r), surfaceColor(sc),reflect(reflec),refract(refrac)
 	{
 	}
 
@@ -50,7 +52,10 @@ public:
 		return true;
 	}
 };
-
+Vector3f mul(Vector3f a, Vector3f b) 
+{
+	return Vector3f( a[0] * b[0] , a[1] * b[1], a[2] * b[2]);
+}
 // diffuse reflection model
 Vector3f diffuse(const Vector3f &L, // direction vector from the point on the surface towards a light source
 	const Vector3f &N, // normal at this point on the surface
@@ -83,12 +88,16 @@ Vector3f phong(const Vector3f &L, // direction vector from the point on the surf
 
 	return resColor;
 }
-
+float mix(const float &a, const float &b, const float &mix)
+{
+	return b * mix + a * (1 - mix);
+}
 Vector3f trace(
 	const Vector3f &rayOrigin,
 	const Vector3f &rayDirection,
-	const std::vector<Sphere> &spheres)
+	const std::vector<Sphere> &spheres, const int &depth)
 {
+	float bias = 1e-4;
 	Vector3f pixelColor = Vector3f::Zero();
 	float t = INFINITY;
 	int index = -1;
@@ -109,13 +118,67 @@ Vector3f trace(
 				// TODO: implement ray tracing as described in the homework description
 		
 	}
-	if (index != -1) 
+	//refelction/refraction
+	if (index != -1 && (spheres[index].reflect > 0 || spheres[index].refract > 0) && depth < MAX_RAY_DEPTH) 
 	{
 		pixelColor = { 0,0,0 };
-		Vector3f ShadowOrigin;
-		ShadowOrigin = rayOrigin + t * rayDirection;
+		Vector3f ShadowOrigin = rayOrigin + t * rayDirection;
 		Vector3f ShadowDirection;
-	
+		Vector3f normal = (ShadowOrigin - spheres[index].center).normalized();
+		Vector3f reflectDirection = (rayDirection - normal * 2 * rayDirection.dot(normal)).normalized();
+		Vector3f reflection = trace(ShadowOrigin + normal * bias, reflectDirection, spheres, depth + 1);
+		Vector3f refraction = { 0,0,0 };
+		bool inside = false;
+		int block = 0;
+		for (int s = 0; s < 3; s++)
+		{
+			block = 0;
+			ShadowDirection = (lightPositions[s] - ShadowOrigin).normalized();
+			for (int k = 0; k < size; k++)
+			{
+				if (spheres[k].intersect(ShadowOrigin, ShadowDirection, t0, t1) == true)
+				{
+					block = 1;
+					break;
+				}
+			}
+			if (block == 0) {
+
+				pixelColor = pixelColor + phong(ShadowDirection, normal
+					, (rayOrigin - ShadowOrigin).normalized(), spheres[index].surfaceColor, { 1,1,1 }, 1, 3, 100);
+
+			}
+
+
+		}
+		
+		if (rayDirection.dot(normal)> 0) normal = -normal, inside = true;
+		float facingratio = -rayDirection.dot(normal);
+		// change the mix value to tweak the effect
+		
+		float fresneleffect = mix(pow(1 - facingratio, 3), 1, 0.1);
+		
+		if (spheres[index].refract==1) {
+			pixelColor = { 0,0,0 };
+			float ior = 1.1, eta = (inside) ? ior : 1 / ior;
+			float cosi = ShadowOrigin.dot(rayDirection);
+			float k = 1 - eta * eta * (1 - cosi * cosi);
+			Vector3f refractionDirection = (rayDirection * eta + normal * (eta *  cosi - sqrt(k))).normalized();
+			refraction = trace(ShadowOrigin-normal*bias, refractionDirection, spheres, depth + 1);
+		}
+		
+		pixelColor += mul((
+			reflection * fresneleffect +
+			refraction * (1 - fresneleffect) * spheres[index].refract) , spheres[index].surfaceColor);
+		
+		return pixelColor;
+	}
+	else if (index != -1) 
+	{
+		pixelColor = { 0,0,0 };
+		Vector3f ShadowOrigin = rayOrigin + t * rayDirection;
+		Vector3f ShadowDirection;
+		Vector3f normal = (ShadowOrigin - spheres[index].center).normalized();
 		int block = 0;
 		for (int s = 0; s < 3; s++) 
 		{
@@ -130,7 +193,7 @@ Vector3f trace(
 				}
 			}
 			if (block == 0) {
-				Vector3f normal = (ShadowOrigin- spheres[index].center).normalized();
+				
 				pixelColor = pixelColor + phong(ShadowDirection, normal
 					, (rayOrigin - ShadowOrigin).normalized(), spheres[index].surfaceColor, {1,1,1}, 1,3,100);
 				
@@ -168,7 +231,7 @@ void render(const std::vector<Sphere> &spheres)
 			float rayY = (1 - 2 * ((y + 0.5f) * invHeight)) * angle;
 			Vector3f rayDirection(rayX, rayY, -1);
 			rayDirection.normalize();
-			*(pixel++) = trace(Vector3f::Zero(), rayDirection, spheres);
+			*(pixel++) = trace(Vector3f::Zero(), rayDirection, spheres,0);
 			
 		}
 	}
@@ -194,12 +257,14 @@ void render(const std::vector<Sphere> &spheres)
 int main(int argc, char **argv)
 {
 	std::vector<Sphere> spheres;
-	// position, radius, surface color
-	spheres.push_back(Sphere(false,Vector3f(0.0, -10004, -20), 10000, Vector3f(0.50, 0.50, 0.50)));
-	spheres.push_back(Sphere(false,Vector3f(0.0, 0, -20), 4, Vector3f(1.00, 0.32, 0.36)));
-	spheres.push_back(Sphere(false,Vector3f(5.0, -1, -15), 2, Vector3f(0.90, 0.76, 0.46)));
-	spheres.push_back(Sphere(false,Vector3f(5.0, 0, -25), 3, Vector3f(0.65, 0.77, 0.97)));
-	spheres.push_back(Sphere(false,Vector3f(-5.5, 0, -13), 3, Vector3f(0.90, 0.90, 0.90)));
+	// position, radius, surface color, reflection:value refraction: t/f 
+	//background
+	spheres.push_back(Sphere(Vector3f(0.0, -10004, -20), 10000, Vector3f(0.50, 0.50, 0.50),0,0));
+	//actual shperes
+	spheres.push_back(Sphere(Vector3f(0.0, 0, -20), 4, Vector3f(1.00, 0.32, 0.36),0.5,0));//red
+	spheres.push_back(Sphere(Vector3f(5.0, -1, -15), 2, Vector3f(0.90, 0.76, 0.46),0.5,1));//yellow
+	spheres.push_back(Sphere(Vector3f(5.0, 0, -25), 3, Vector3f(0.65, 0.77, 0.97),0.5,0));//blue
+	spheres.push_back(Sphere(Vector3f(-5.5, 0, -13), 3, Vector3f(0.90, 0.90, 0.90),0,0));//white
 
 	render(spheres);
 
