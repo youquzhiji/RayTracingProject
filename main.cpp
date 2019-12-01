@@ -160,7 +160,7 @@ Vector3f trace(
 		
 		if (spheres[index].refract==1) {
 			pixelColor = { 0,0,0 };
-			float ior = 1.1, eta = (inside) ? ior : 1 / ior;
+			float ior = 1.52, eta = (inside) ? ior : 1 / ior;
 			float cosi = ShadowOrigin.dot(rayDirection);
 			float k = 1 - eta * eta * (1 - cosi * cosi);
 			Vector3f refractionDirection = (rayDirection * eta + normal * (eta *  cosi - sqrt(k))).normalized();
@@ -180,6 +180,7 @@ Vector3f trace(
 		Vector3f ShadowDirection;
 		Vector3f normal = (ShadowOrigin - spheres[index].center).normalized();
 		int block = 0;
+		std::vector<int> blocksphere;
 		for (int s = 0; s < 3; s++) 
 		{
 			block = 0;
@@ -189,7 +190,8 @@ Vector3f trace(
 				if (spheres[k].intersect(ShadowOrigin, ShadowDirection, t0, t1) == true)
 				{
 					block = 1;
-					break;
+					blocksphere.push_back(k);
+					
 				}
 			}
 			if (block == 0) {
@@ -198,6 +200,25 @@ Vector3f trace(
 					, (rayOrigin - ShadowOrigin).normalized(), spheres[index].surfaceColor, {1,1,1}, 1,3,100);
 				
 			}
+			
+			if(block != 0 && blocksphere.size()==1&& spheres[blocksphere[0]].refract==1)
+			{
+				float facingratio = -rayDirection.dot(normal);
+				// change the mix value to tweak the effect
+
+				float fresneleffect = mix(pow(1 - facingratio, 3), 1, 0.1);
+
+				Vector3f refraction = { 0,0,0 };
+				bool inside = false;
+				if (rayDirection.dot(normal) > 0) normal = -normal, inside = true;
+				float ior = 1.1, eta = (inside) ? ior : 1 / ior;
+				float cosi = ShadowOrigin.dot(rayDirection);
+				float k = 1 - eta * eta * (1 - cosi * cosi);
+				Vector3f refractionDirection = (rayDirection * eta + normal * (eta *  cosi - sqrt(k))).normalized();
+				refraction = trace(ShadowOrigin - normal * bias, refractionDirection, spheres, depth + 1);
+				pixelColor += mul((refraction * (1 - fresneleffect) * spheres[index].refract), spheres[index].surfaceColor);
+			}
+			
 
 					
 		}
