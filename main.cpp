@@ -25,8 +25,9 @@ public:
 	Vector3f center;  // position of the sphere
 	float radius;  // sphere radius
 	Vector3f surfaceColor; // surface color
+	bool isGlass;
 	
-  Sphere(
+	Sphere(bool g,
 		const Vector3f &c,
 		const float &r,
 		const Vector3f &sc) :
@@ -194,11 +195,11 @@ int main(int argc, char **argv)
 {
 	std::vector<Sphere> spheres;
 	// position, radius, surface color
-	spheres.push_back(Sphere(Vector3f(0.0, -10004, -20), 10000, Vector3f(0.50, 0.50, 0.50)));
-	spheres.push_back(Sphere(Vector3f(0.0, 0, -20), 4, Vector3f(1.00, 0.32, 0.36)));
-	spheres.push_back(Sphere(Vector3f(5.0, -1, -15), 2, Vector3f(0.90, 0.76, 0.46)));
-	spheres.push_back(Sphere(Vector3f(5.0, 0, -25), 3, Vector3f(0.65, 0.77, 0.97)));
-	spheres.push_back(Sphere(Vector3f(-5.5, 0, -13), 3, Vector3f(0.90, 0.90, 0.90)));
+	spheres.push_back(Sphere(false,Vector3f(0.0, -10004, -20), 10000, Vector3f(0.50, 0.50, 0.50)));
+	spheres.push_back(Sphere(false,Vector3f(0.0, 0, -20), 4, Vector3f(1.00, 0.32, 0.36)));
+	spheres.push_back(Sphere(false,Vector3f(5.0, -1, -15), 2, Vector3f(0.90, 0.76, 0.46)));
+	spheres.push_back(Sphere(false,Vector3f(5.0, 0, -25), 3, Vector3f(0.65, 0.77, 0.97)));
+	spheres.push_back(Sphere(false,Vector3f(-5.5, 0, -13), 3, Vector3f(0.90, 0.90, 0.90)));
 
 	render(spheres);
 
