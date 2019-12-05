@@ -13,7 +13,7 @@ using namespace Eigen;
 
 // image background color
 Vector3f bgcolor(1.0f, 1.0f, 1.0f);
-
+constexpr float kEpsilon = 1e-8;
 std::vector<float> g_meshVertices;
 std::vector<float> g_meshNormals;
 std::vector<unsigned int> g_meshIndices;
@@ -153,17 +153,87 @@ public:
 	virtual bool intersect(const Vector3f &rayOrigin, const Vector3f &rayDirection, float &t0, float &t1) const=0;
 	virtual Vector3f getNormal(const Vector3f &RayOrigin)const=0;
 };
-class Triangle:Shape
+class Triangle:public Shape
 {
+public:
 	Vector3f vert1;
 	Vector3f vert2;
 	Vector3f vert3;
 	Vector3f surfaceColor;
+	float reflect;
+	float refract;
+
+	explicit Triangle(const Vector3f &une, const Vector3f &deux, const Vector3f &trois, const Vector3f &color, float refl, float refra ):
+		vert1(une),vert2(deux),vert3(trois),surfaceColor(color),reflect(refl),refract(refra)
+	{
+		
+	}
+	Vector3f getsurfaceColor()const override
+	{
+		return surfaceColor;
+	}
+	float getreflect()const override
+	{
+		return reflect;
+	}
+	float getrefract()const override
+	{
+		return refract;
+	}
 	bool intersect(const Vector3f &rayOrigin, const Vector3f &rayDirection, float &t0, float &t1) const 
 	{
-		return true;
+		// no need to normalize
+		Vector3f N = getCrossNormal(); // N 
+		float denom = N.dot(N);
+
+		// Step 1: finding P
+
+		// check if ray and plane are parallel ?
+		float NdotRayDirection = N.dot(rayDirection);
+		if (fabs(NdotRayDirection) < kEpsilon) // almost 0 
+			return false; // they are parallel so they don't intersect ! 
+
+		// compute d parameter using equation 2
+		float d = N.dot(vert1);
+
+		// compute t (equation 3)
+		t1 = (N.dot(rayOrigin) + d) / NdotRayDirection;
+		t0 = (N.dot(rayOrigin) + d) / NdotRayDirection;
+		// check if the triangle is in behind the ray
+		if (t1 < 0) return false; // the triangle is behind 
+
+		// compute the intersection point using equation 1
+		Vector3f P = rayOrigin + t1 * rayDirection;
+
+		// Step 2: inside-outside test
+		Vector3f C; // vector perpendicular to triangle's plane 
+
+		// edge 0
+		C = (vert2-vert1).cross(P-vert1);
+		if (N.dot(C) < 0) return false; // P is on the right side 
+
+		// edge 1
+		C = (vert3-vert2).cross(P-vert2);
+		if ((N.dot(C)) < 0)  return false; // P is on the right side 
+
+		// edge 2
+		C = (vert1-vert3).cross(P-vert3);
+		if ((N.dot(C)) < 0) return false; // P is on the right side; 
+
+		//u /= denom;
+		//v /= denom;
+
+		return true; // this ray hits the triangle 
+		//return false;
 	}
-	Vector3f getNormal() {}
+	Vector3f getNormal(const Vector3f &RayOrigin) const override
+	{
+		return ((vert2 - vert1).cross(vert3 - vert1)).normalized();
+	}
+	Vector3f getCrossNormal()  const
+	{
+		return ((vert2 - vert1).cross(vert3 - vert1));
+	}
 };
 
 
@@ -445,10 +515,11 @@ int main(int argc, char **argv)
 	//background
 	spheres.push_back(new Sphere(Vector3f(0.0, -10004, -20), 10000, Vector3f(0.50, 0.50, 0.50),0,0));
 	//actual shperes
-	spheres.push_back(new Sphere(Vector3f(0.0, 0, -20), 4, Vector3f(1.00, 0.32, 0.36),0.5,0));//red
-	spheres.push_back(new Sphere(Vector3f(5.0, -1, -15), 2, Vector3f(0.90, 0.76, 0.46),0.5,1));//yellow
-	spheres.push_back(new Sphere(Vector3f(5.0, 0, -25), 3, Vector3f(0.65, 0.77, 0.97),0.5,0));//blue
+	//spheres.push_back(new Sphere(Vector3f(0.0, 0, -20), 4, Vector3f(1.00, 0.32, 0.36),0.5,1));//red
+	//spheres.push_back(new Sphere(Vector3f(5.0, -1, -15), 2, Vector3f(0.90, 0.76, 0.46),0.5,1));//yellow
+	//spheres.push_back(new Sphere(Vector3f(5.0, 0, -25), 3, Vector3f(0.65, 0.77, 0.97),0.5,1));//blue
 	spheres.push_back(new Sphere(Vector3f(-5.5, 0, -13), 3, Vector3f(0.90, 0.90, 0.90),0,0));//white
+	spheres.push_back(new Triangle(Vector3f(5.0, -1, -15), Vector3f(0.0, 0, -20), Vector3f(5.0, 0, -25), Vector3f(1.00, 0.32, 0.36), 0.5, 0));//white
 	loadObj("teapot.obj");
 
 	render(spheres);
