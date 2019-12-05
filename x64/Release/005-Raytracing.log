@@ -1,20 +1,20 @@
 ﻿  main.cpp
-c:\users\luigi\documents\github\raytracingproject\main.cpp(67): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(85): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(85): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(100): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(106): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(159): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(163): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(209): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(214): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(244): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(285): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(286): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(287): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(288): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(230): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(248): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(248): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(263): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(269): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(322): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(326): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(372): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(377): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(407): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(448): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(449): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(450): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(451): warning C4305: 'argument': truncation from 'double' to 'const float'
   Generating code
-  1 of 1067 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  4 of 1250 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code

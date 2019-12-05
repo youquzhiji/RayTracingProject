@@ -1,13 +1,27 @@
 ﻿  main.cpp
-c:\users\luigi\documents\github\raytracingproject\main.cpp(66): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(84): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(84): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(104): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(134): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(137): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(196): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(237): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(238): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(239): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(240): warning C4305: 'argument': truncation from 'double' to 'const float'
-  005-Raytracing.vcxproj -> C:\Users\luigi\Documents\GitHub\RayTracingProject\x64\Debug\005-Raytracing.exe
+c:\users\luigi\documents\github\raytracingproject\main.cpp(230): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(248): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(248): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(263): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(269): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(322): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(326): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(363): error C2039: 'surfaceColor': is not a member of 'Shape'
+  c:\users\luigi\documents\github\raytracingproject\main.cpp(147): note: see declaration of 'Shape'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(362): error C2660: 'phong': function does not take 7 arguments
+  c:\users\luigi\documents\github\raytracingproject\main.cpp(237): note: see declaration of 'phong'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(367): error C2039: 'refract': is not a member of 'Shape'
+  c:\users\luigi\documents\github\raytracingproject\main.cpp(147): note: see declaration of 'Shape'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(372): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(377): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(382): error C2039: 'refract': is not a member of 'Shape'
+  c:\users\luigi\documents\github\raytracingproject\main.cpp(147): note: see declaration of 'Shape'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(382): error C2039: 'surfaceColor': is not a member of 'Shape'
+  c:\users\luigi\documents\github\raytracingproject\main.cpp(147): note: see declaration of 'Shape'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(382): error C2660: 'mul': function does not take 1 arguments
+  c:\users\luigi\documents\github\raytracingproject\main.cpp(218): note: see declaration of 'mul'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(407): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(448): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(449): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(450): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(451): warning C4305: 'argument': truncation from 'double' to 'const float'
