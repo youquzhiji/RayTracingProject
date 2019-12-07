@@ -1,14 +1,29 @@
 ﻿  main.cpp
-c:\users\luigi\documents\github\raytracingproject\main.cpp(16): warning C4305: 'initializing': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(300): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(318): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(318): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(333): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(339): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(392): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(396): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(442): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(447): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(477): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(522): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(20): warning C4305: 'initializing': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(242): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(259): warning C4244: 'argument': conversion from 'unsigned int' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+c:\users\luigi\documents\github\raytracingproject\main.cpp(260): warning C4244: 'argument': conversion from 'unsigned int' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+c:\users\luigi\documents\github\raytracingproject\main.cpp(261): warning C4244: 'argument': conversion from 'unsigned int' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+c:\users\luigi\documents\github\raytracingproject\main.cpp(381): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(399): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(399): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(414): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(420): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(473): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(477): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(523): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(528): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(558): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   005-Raytracing.vcxproj -> C:\Users\luigi\Documents\GitHub\RayTracingProject\x64\Debug\005-Raytracing.exe

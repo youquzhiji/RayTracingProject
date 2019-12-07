@@ -8,152 +8,34 @@
 #include <random>
 #include <algorithm>
 #include <Eigen>
+#include <istream>
+
+#include <string>
+//#include "ext/TriMesh.h"
 #define MAX_RAY_DEPTH 5 
 using namespace Eigen;
 
 // image background color
 Vector3f bgcolor(1.0f, 1.0f, 1.0f);
 constexpr float kEpsilon = 1e-8;
-std::vector<float> g_meshVertices;
+std::vector<Vector3f> g_meshVertices;
 std::vector<float> g_meshNormals;
+std::vector<float> g_vertexnormals;
+
 std::vector<unsigned int> g_meshIndices;
+
 float g_modelViewMatrix[16];
-std::vector<float> cross(std::vector<float> a, std::vector<float> b)
-{
-	std::vector<float> result = std::vector<float>();
-	result.push_back(a[1] * b[2] - b[1] * a[2]);
-	result.push_back(a[2] * b[0] - b[2] * a[0]);
-	result.push_back(a[0] * b[1] - b[0] * a[1]);
-	/*float normalizer = sqrtf(result[0] * result[0] + result[1] * result[1] + result[2] * result[2]);
-	result[0] = (result[0] / normalizer);
-	result[1] = (result[1] / normalizer);
-	result[2] = (result[2] / normalizer);*/
-	return result;
 
-}
-void computeNormals()
-{
-	g_meshNormals.resize(g_meshVertices.size());
-
-	// TASK 1
-	// The code below sets all normals to point in the z-axis, so we get a boring constant gray color
-	// The following should be replaced with your code for normal computation
-	for (int v = 0; v < g_meshIndices.size() / 3; ++v)
-	{
-		int k = v * 3 + 1;
-		std::vector<float> a = std::vector<float>();
-		std::vector<float> b = std::vector<float>();
-		a.push_back(g_meshVertices[3 * g_meshIndices[k - 1]] - g_meshVertices[3 * g_meshIndices[k]]);
-		a.push_back(g_meshVertices[3 * g_meshIndices[k - 1] + 1] - g_meshVertices[3 * g_meshIndices[k] + 1]);
-		a.push_back(g_meshVertices[3 * g_meshIndices[k - 1] + 2] - g_meshVertices[3 * g_meshIndices[k] + 2]);
-
-		b.push_back(g_meshVertices[3 * g_meshIndices[k]] - g_meshVertices[3 * g_meshIndices[1 + k]]);
-		b.push_back(g_meshVertices[3 * g_meshIndices[k] + 1] - g_meshVertices[3 * g_meshIndices[1 + k] + 1]);
-		b.push_back(g_meshVertices[3 * g_meshIndices[k] + 2] - g_meshVertices[3 * g_meshIndices[1 + k] + 2]);
-
-		std::vector<float>normal = cross(a, b);
-
-		g_meshNormals[3 * g_meshIndices[k]] += normal[0];
-		g_meshNormals[3 * g_meshIndices[k] + 1] += normal[1];
-		g_meshNormals[3 * g_meshIndices[k] + 2] += normal[2];
-
-		g_meshNormals[3 * g_meshIndices[k + 1]] += normal[0];
-		g_meshNormals[3 * g_meshIndices[k + 1] + 1] += normal[1];
-		g_meshNormals[3 * g_meshIndices[k + 1] + 2] += normal[2];
-
-		g_meshNormals[3 * g_meshIndices[k - 1]] += normal[0];
-		g_meshNormals[3 * g_meshIndices[k - 1] + 1] += normal[1];
-		g_meshNormals[3 * g_meshIndices[k - 1] + 2] += normal[2];
-
-
-	}
-
-	/*for (int v = 0; v < g_meshNormals.size() / 3 - 1; ++v)
-	{
-
-		g_meshNormals[3 * v] = (g_meshNormals[3 * v]+ g_meshNormals[3 * v+3])/2;
-		g_meshNormals[3 * v+1] = (g_meshNormals[3 * v+1] + g_meshNormals[3 * v +1+3]) / 2;
-		g_meshNormals[3 * v+2] = (g_meshNormals[3 * v+2] + g_meshNormals[3 * v +2+ 3]) / 2;
-
-
-	}
-	*/
-	for (int v = 0; v < g_meshNormals.size() / 3; ++v)
-	{
-		float normalizer = sqrtf(g_meshNormals[v * 3] * g_meshNormals[v * 3] + g_meshNormals[v * 3 + 1] * g_meshNormals[v * 3 + 1] + g_meshNormals[v * 3 + 2] * g_meshNormals[v * 3 + 2]);
-		g_meshNormals[v * 3] = (g_meshNormals[v * 3] / normalizer);
-		g_meshNormals[v * 3 + 1] = (g_meshNormals[v * 3 + 1] / normalizer);
-		g_meshNormals[v * 3 + 2] = (g_meshNormals[v * 3 + 2] / normalizer);
-
-	}
-	std::vector<float> a = std::vector<float>();
-	std::vector<float> b = std::vector<float>();
-	a.push_back(1.0f);
-	a.push_back(2.0f);
-	a.push_back(3.0f);
-
-	b.push_back(4.0f);
-	b.push_back(5.0f);
-	b.push_back(6.0f);
-	std::vector<float>result = cross(a, b);
-	std::cout << "compute cross product" << result[0] << ", " << result[1] << ", " << result[2] << "\n";
-
-}
-
-void loadObj(std::string p_path)
-{
-	std::ifstream nfile;
-	nfile.open(p_path);
-	std::string s;
-
-	while (nfile >> s)
-	{
-		if (s.compare("v") == 0)
-		{
-			float x, y, z;
-			nfile >> x >> y >> z;
-			g_meshVertices.push_back(x);
-			g_meshVertices.push_back(y);
-			g_meshVertices.push_back(z);
-		}
-		else if (s.compare("f") == 0)
-		{
-			std::string sa, sb, sc;
-			unsigned int a, b, c;
-			nfile >> sa >> sb >> sc;
-
-			a = std::stoi(sa);
-			b = std::stoi(sb);
-			c = std::stoi(sc);
-
-			g_meshIndices.push_back(a - 1);
-			g_meshIndices.push_back(b - 1);
-			g_meshIndices.push_back(c - 1);
-		}
-		else
-		{
-			std::getline(nfile, s);
-		}
-	}
-
-	computeNormals();
-
-	std::cout << p_path << " loaded. Vertices: " << g_meshVertices.size() / 3 << " Triangles: " << g_meshIndices.size() / 3 << std::endl;
-}
-// lights in the scene
-std::vector<Vector3f> lightPositions = { Vector3f(  0.0, 60, 60)
-                                       , Vector3f(-60.0, 60, 60)
-                                       , Vector3f( 60.0, 60, 60) };
-class Shape 
+class Shape
 {
 public:
-	virtual Vector3f getsurfaceColor()const=0;
-	virtual float getreflect()const=0;
-	virtual float getrefract()const=0;
-	virtual bool intersect(const Vector3f &rayOrigin, const Vector3f &rayDirection, float &t0, float &t1) const=0;
-	virtual Vector3f getNormal(const Vector3f &RayOrigin)const=0;
+	virtual Vector3f getsurfaceColor()const = 0;
+	virtual float getreflect()const = 0;
+	virtual float getrefract()const = 0;
+	virtual bool intersect(const Vector3f &rayOrigin, const Vector3f &rayDirection, float &t0, float &t1) const = 0;
+	virtual Vector3f getNormal(const Vector3f &RayOrigin)const = 0;
 };
-class Triangle:public Shape
+class Triangle :public Shape
 {
 public:
 	Vector3f vert1;
@@ -163,10 +45,10 @@ public:
 	float reflect;
 	float refract;
 
-	explicit Triangle(const Vector3f &une, const Vector3f &deux, const Vector3f &trois, const Vector3f &color, float refl, float refra ):
-		vert1(une),vert2(deux),vert3(trois),surfaceColor(color),reflect(refl),refract(refra)
+	explicit Triangle(const Vector3f &une, const Vector3f &deux, const Vector3f &trois, const Vector3f &color, float refl, float refra) :
+		vert1(une), vert2(deux), vert3(trois), surfaceColor(color), reflect(refl), refract(refra)
 	{
-		
+
 	}
 	Vector3f getsurfaceColor()const override
 	{
@@ -180,7 +62,7 @@ public:
 	{
 		return refract;
 	}
-	bool intersect(const Vector3f &rayOrigin, const Vector3f &rayDirection, float &t0, float &t1) const 
+	bool intersect(const Vector3f &rayOrigin, const Vector3f &rayDirection, float &t0, float &t1) const
 	{
 		// no need to normalize
 		Vector3f N = getCrossNormal(); // N 
@@ -197,10 +79,10 @@ public:
 		float d = N.dot(vert1);
 
 		// compute t (equation 3)
-		t1 = (N.dot(rayOrigin) + d) / NdotRayDirection;
-		t0 = (N.dot(rayOrigin) + d) / NdotRayDirection;
+		t1 = (N.dot(rayOrigin) + d) / (NdotRayDirection);
+		t0 = (N.dot(rayOrigin) + d) / (NdotRayDirection);
 		// check if the triangle is in behind the ray
-		if (t1 < 0) return false; // the triangle is behind 
+		//if (t1 < 0) return false; // the triangle is behind 
 
 		// compute the intersection point using equation 1
 		Vector3f P = rayOrigin + t1 * rayDirection;
@@ -209,15 +91,15 @@ public:
 		Vector3f C; // vector perpendicular to triangle's plane 
 
 		// edge 0
-		C = (vert2-vert1).cross(P-vert1);
+		C = (vert2 - vert1).cross(P - vert1);
 		if (N.dot(C) < 0) return false; // P is on the right side 
 
 		// edge 1
-		C = (vert3-vert2).cross(P-vert2);
+		C = (vert3 - vert2).cross(P - vert2);
 		if ((N.dot(C)) < 0)  return false; // P is on the right side 
 
 		// edge 2
-		C = (vert1-vert3).cross(P-vert3);
+		C = (vert1 - vert3).cross(P - vert3);
 		if ((N.dot(C)) < 0) return false; // P is on the right side; 
 
 		//u /= denom;
@@ -235,6 +117,213 @@ public:
 		return ((vert2 - vert1).cross(vert3 - vert1));
 	}
 };
+std::vector<std::string> removeDupWord(std::string str)
+{
+	std::vector<std::string>  result;
+	std::istringstream in(str); 
+	std::string t;
+	while (getline(in, t, ' ')) {
+		result.push_back(t);
+	}
+
+	return result;
+}
+
+std::vector<float> cross(std::vector<float> a, std::vector<float> b)
+{
+	std::vector<float> result = std::vector<float>();
+	result.push_back(a[1] * b[2] - b[1] * a[2]);
+	result.push_back(a[2] * b[0] - b[2] * a[0]);
+	result.push_back(a[0] * b[1] - b[0] * a[1]);
+	/*float normalizer = sqrtf(result[0] * result[0] + result[1] * result[1] + result[2] * result[2]);
+	result[0] = (result[0] / normalizer);
+	result[1] = (result[1] / normalizer);
+	result[2] = (result[2] / normalizer);*/
+	return result;
+
+}
+//void computeNormals()
+//{
+//	g_meshNormals.resize(g_meshVertices.size());
+//
+//	// TASK 1
+//	// The code below sets all normals to point in the z-axis, so we get a boring constant gray color
+//	// The following should be replaced with your code for normal computation
+//	for (int v = 0; v < g_meshIndices.size() / 3; ++v)
+//	{
+//		int k = v * 3 + 1;
+//		std::vector<float> a = std::vector<float>();
+//		std::vector<float> b = std::vector<float>();
+//		a.push_back(g_meshVertices[3 * g_meshIndices[k - 1]] - g_meshVertices[3 * g_meshIndices[k]]);
+//		a.push_back(g_meshVertices[3 * g_meshIndices[k - 1] + 1] - g_meshVertices[3 * g_meshIndices[k] + 1]);
+//		a.push_back(g_meshVertices[3 * g_meshIndices[k - 1] + 2] - g_meshVertices[3 * g_meshIndices[k] + 2]);
+//
+//		b.push_back(g_meshVertices[3 * g_meshIndices[k]] - g_meshVertices[3 * g_meshIndices[1 + k]]);
+//		b.push_back(g_meshVertices[3 * g_meshIndices[k] + 1] - g_meshVertices[3 * g_meshIndices[1 + k] + 1]);
+//		b.push_back(g_meshVertices[3 * g_meshIndices[k] + 2] - g_meshVertices[3 * g_meshIndices[1 + k] + 2]);
+//
+//		std::vector<float>normal = cross(a, b);
+//
+//		g_meshNormals[3 * g_meshIndices[k]] += normal[0];
+//		g_meshNormals[3 * g_meshIndices[k] + 1] += normal[1];
+//		g_meshNormals[3 * g_meshIndices[k] + 2] += normal[2];
+//
+//		g_meshNormals[3 * g_meshIndices[k + 1]] += normal[0];
+//		g_meshNormals[3 * g_meshIndices[k + 1] + 1] += normal[1];
+//		g_meshNormals[3 * g_meshIndices[k + 1] + 2] += normal[2];
+//
+//		g_meshNormals[3 * g_meshIndices[k - 1]] += normal[0];
+//		g_meshNormals[3 * g_meshIndices[k - 1] + 1] += normal[1];
+//		g_meshNormals[3 * g_meshIndices[k - 1] + 2] += normal[2];
+//
+//
+//	}
+//
+//	/*for (int v = 0; v < g_meshNormals.size() / 3 - 1; ++v)
+//	{
+//
+//		g_meshNormals[3 * v] = (g_meshNormals[3 * v]+ g_meshNormals[3 * v+3])/2;
+//		g_meshNormals[3 * v+1] = (g_meshNormals[3 * v+1] + g_meshNormals[3 * v +1+3]) / 2;
+//		g_meshNormals[3 * v+2] = (g_meshNormals[3 * v+2] + g_meshNormals[3 * v +2+ 3]) / 2;
+//
+//
+//	}
+//	*/
+//	for (int v = 0; v < g_meshNormals.size() / 3; ++v)
+//	{
+//		float normalizer = sqrtf(g_meshNormals[v * 3] * g_meshNormals[v * 3] + g_meshNormals[v * 3 + 1] * g_meshNormals[v * 3 + 1] + g_meshNormals[v * 3 + 2] * g_meshNormals[v * 3 + 2]);
+//		g_meshNormals[v * 3] = (g_meshNormals[v * 3] / normalizer);
+//		g_meshNormals[v * 3 + 1] = (g_meshNormals[v * 3 + 1] / normalizer);
+//		g_meshNormals[v * 3 + 2] = (g_meshNormals[v * 3 + 2] / normalizer);
+//
+//	}
+//	std::vector<float> a = std::vector<float>();
+//	std::vector<float> b = std::vector<float>();
+//	a.push_back(1.0f);
+//	a.push_back(2.0f);
+//	a.push_back(3.0f);
+//
+//	b.push_back(4.0f);
+//	b.push_back(5.0f);
+//	b.push_back(6.0f);
+//	std::vector<float>result = cross(a, b);
+//	std::cout << "compute cross product" << result[0] << ", " << result[1] << ", " << result[2] << "\n";
+//
+//}
+
+void loadObj(std::string p_path, std::vector<Shape*>& spheres)
+{
+	std::ifstream nfile;
+	nfile.open(p_path);
+	std::string s;
+
+	while (std::getline(nfile,s))
+	{
+		
+			if (s.at(0) == 'v'&&s.at(1) == ' ')
+			{
+				float x, y, z;
+				std::vector<std::string>sepline = removeDupWord(s);
+				x = std::stof(sepline[1])*0.1;
+				y = std::stof(sepline[3])*0.1-2;
+				z = std::stof(sepline[2])*0.1-10;
+				Vector3f vertex = { x,y,z };
+				g_meshVertices.push_back(vertex);
+			}
+			else if (s.at(0)==('f'))
+			{
+				std::string sa, sb, sc, sd;
+				unsigned int a, b, c,d;
+				std::vector<std::string>sepline = removeDupWord(s);
+				if (sepline.size() == 4) {
+					a = std::stoi(sepline[1]);
+					b = std::stoi(sepline[2]);
+					c = std::stoi(sepline[3]);
+					spheres.push_back(new Triangle(g_meshVertices[a - 1], g_meshVertices[b - 1], g_meshVertices[c - 1], Vector3f(1.00, 0.32, 0.36), 0.5, 0));
+				}
+				if (sepline.size() == 5) {
+					a = std::stoi(sepline[1]);
+					b = std::stoi(sepline[2]);
+					c = std::stoi(sepline[3]);
+					d = std::stoi(sepline[4]);
+					spheres.push_back(new Triangle(g_meshVertices[a - 1], g_meshVertices[b - 1], g_meshVertices[c - 1], Vector3f(1.00, 0.32, 0.36), 0.5, 0));
+					spheres.push_back(new Triangle(g_meshVertices[a - 1], g_meshVertices[c - 1], g_meshVertices[d - 1], Vector3f(1.00, 0.32, 0.36), 0.5, 0));
+				
+				}
+				//g_meshIndices.push_back(a - 1);
+				//g_meshIndices.push_back(b - 1);
+				//g_meshIndices.push_back(c - 1);
+			}
+			else if (s.compare("vn") == 0)
+			{
+				std::string sa, sb, sc;
+				unsigned int a, b, c;
+				nfile >> sa >> sb >> sc;
+
+				a = std::stoi(sa);
+				b = std::stoi(sb);
+				c = std::stoi(sc);
+
+				g_vertexnormals.push_back(a - 1);
+				g_vertexnormals.push_back(b - 1);
+				g_vertexnormals.push_back(c - 1);
+			}
+
+			else
+			{
+			//	std::getline(nfile, s);
+			}
+		}
+		
+	//computeNormals();
+
+	std::cout << p_path << " loaded. Vertices: " << g_meshVertices.size() << " Triangles: " << g_meshIndices.size() / 3 << std::endl;
+}
+// lights in the scene
+std::vector<Vector3f> lightPositions = { Vector3f(  0.0, 60, 60)
+                                       , Vector3f(-60.0, 60, 60)
+                                       , Vector3f( 60.0, 60, 60) 
+};
+
+class Mesh : public Shape 
+{
+public:
+	std::vector<float> meshVertices;
+	std::vector<float> meshNormals;
+	std::vector<unsigned int> meshIndices;
+	Vector3f desierednormal;
+	Vector3f scColor;
+	float reflect;
+	float refract;
+	explicit Mesh( const Vector3f &color, float refl, float refra) :
+		 scColor(color), reflect(refl), refract(refra)
+	{
+
+	}
+	 Vector3f getsurfaceColor()const override 
+	{
+		return scColor;
+	}
+	 float getreflect()const override
+	{
+		return reflect;
+	}
+	 float getrefract()const override 
+	{
+		return refract;
+	}
+	 bool intersect(const Vector3f &rayOrigin, const Vector3f &rayDirection, float &t0, float &t1) const override 
+	{
+
+		return false;
+	}
+	 Vector3f getNormal(const Vector3f &RayOrigin)const override
+	{
+		return desierednormal;
+	}
+
+};
+
 
 
 class Sphere:public Shape
@@ -515,13 +604,14 @@ int main(int argc, char **argv)
 	//background
 	spheres.push_back(new Sphere(Vector3f(0.0, -10004, -20), 10000, Vector3f(0.50, 0.50, 0.50),0,0));
 	//actual shperes
-	//spheres.push_back(new Sphere(Vector3f(0.0, 0, -20), 4, Vector3f(1.00, 0.32, 0.36),0.5,1));//red
+	//spheres.push_back(new Sphere(Vector3f(0.0, 0, -20), 4, Vector3f(1.00, 0.32, 0.36),0.5,0));//red
 	//spheres.push_back(new Sphere(Vector3f(5.0, -1, -15), 2, Vector3f(0.90, 0.76, 0.46),0.5,1));//yellow
 	//spheres.push_back(new Sphere(Vector3f(5.0, 0, -25), 3, Vector3f(0.65, 0.77, 0.97),0.5,1));//blue
-	spheres.push_back(new Sphere(Vector3f(-5.5, 0, -13), 3, Vector3f(0.90, 0.90, 0.90),0,0));//white
-	spheres.push_back(new Triangle(Vector3f(5.0, -1, -15), Vector3f(0.0, 0, -20), Vector3f(5.0, 0, -25), Vector3f(1.00, 0.32, 0.36), 0.5, 0));//white
-	loadObj("teapot.obj");
-
+	//spheres.push_back(new Sphere(Vector3f(-5.5, 0, -13), 3, Vector3f(0.90, 0.90, 0.90),0,0));//white
+	//spheres.push_back(new Triangle(Vector3f(5.0, -1, -15), Vector3f(0.0, 0, -20), Vector3f(5.0, 0, -25), Vector3f(1.00, 0.32, 0.36), 0.5, 0));//white
+	//spheres.push_back(new Triangle(Vector3f(5.0, 1, -15), Vector3f(0.0, 0, -20), Vector3f(5.0, 0, -25), Vector3f(1.00, 0.32, 0.36), 0.5, 0));//white
+	loadObj("teapotlow.obj", spheres);
+	
 	render(spheres);
 
 	return 0;

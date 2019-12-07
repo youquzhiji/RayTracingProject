@@ -1,20 +1,39 @@
 ﻿  main.cpp
-c:\users\luigi\documents\github\raytracingproject\main.cpp(16): warning C4305: 'initializing': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(300): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(318): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(318): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(333): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(339): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(392): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(396): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(442): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(447): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(477): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\luigi\documents\github\raytracingproject\main.cpp(521): warning C4305: 'argument': truncation from 'double' to 'const float'
-c:\users\luigi\documents\github\raytracingproject\main.cpp(522): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(20): warning C4305: 'initializing': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(227): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(228): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(229): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(242): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(249): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(250): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(267): warning C4244: 'argument': conversion from 'unsigned int' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+c:\users\luigi\documents\github\raytracingproject\main.cpp(268): warning C4244: 'argument': conversion from 'unsigned int' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+c:\users\luigi\documents\github\raytracingproject\main.cpp(269): warning C4244: 'argument': conversion from 'unsigned int' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=float
+          ]
+c:\users\luigi\documents\github\raytracingproject\main.cpp(389): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(407): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(407): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(422): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(428): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\luigi\documents\github\raytracingproject\main.cpp(481): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(485): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(531): warning C4305: 'argument': truncation from 'double' to 'const float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(536): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\luigi\documents\github\raytracingproject\main.cpp(566): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   Generating code
-  10 of 1291 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    4 functions had inline decision re-evaluated but remain unchanged
+  257 of 1372 functions (18.7%) were compiled, the rest were copied from previous compilation.
+    5 functions were new in current compilation
+    49 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   005-Raytracing.vcxproj -> C:\Users\luigi\Documents\GitHub\RayTracingProject\x64\Release\005-Raytracing.exe
