@@ -604,13 +604,13 @@ int main(int argc, char **argv)
 	//background
 	spheres.push_back(new Sphere(Vector3f(0.0, -10004, -20), 10000, Vector3f(0.50, 0.50, 0.50),0,0));
 	//actual shperes
-	//spheres.push_back(new Sphere(Vector3f(0.0, 0, -20), 4, Vector3f(1.00, 0.32, 0.36),0.5,0));//red
-	//spheres.push_back(new Sphere(Vector3f(5.0, -1, -15), 2, Vector3f(0.90, 0.76, 0.46),0.5,1));//yellow
-	//spheres.push_back(new Sphere(Vector3f(5.0, 0, -25), 3, Vector3f(0.65, 0.77, 0.97),0.5,1));//blue
-	//spheres.push_back(new Sphere(Vector3f(-5.5, 0, -13), 3, Vector3f(0.90, 0.90, 0.90),0,0));//white
+	spheres.push_back(new Sphere(Vector3f(0.0, 0, -20), 4, Vector3f(1.00, 0.32, 0.36),0.5,0));//red
+	spheres.push_back(new Sphere(Vector3f(5.0, -1, -15), 2, Vector3f(0.90, 0.76, 0.46),0.5,1));//yellow
+	spheres.push_back(new Sphere(Vector3f(5.0, 0, -25), 3, Vector3f(0.65, 0.77, 0.97),0.5,1));//blue
+	spheres.push_back(new Sphere(Vector3f(-5.5, 0, -13), 3, Vector3f(0.90, 0.90, 0.90),0,0));//white
 	//spheres.push_back(new Triangle(Vector3f(5.0, -1, -15), Vector3f(0.0, 0, -20), Vector3f(5.0, 0, -25), Vector3f(1.00, 0.32, 0.36), 0.5, 0));//white
 	//spheres.push_back(new Triangle(Vector3f(5.0, 1, -15), Vector3f(0.0, 0, -20), Vector3f(5.0, 0, -25), Vector3f(1.00, 0.32, 0.36), 0.5, 0));//white
-	loadObj("teapotlow.obj", spheres);
+	//loadObj("teapotlow.obj", spheres);
 	
 	render(spheres);
 
